@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import './Profile.css'
 
 const Profile = ({ user, onLogout }) => {
+    const [showNotifications, setShowNotifications] = useState(false)
+
     const getDaysUntilExam = () => {
         if (!user.examDate) return null
         const diff = Math.ceil((new Date(user.examDate) - new Date()) / 86400000)
@@ -9,8 +12,55 @@ const Profile = ({ user, onLogout }) => {
 
     const joinDate = new Date(user.joinedDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
+    const mockNotifications = [
+        { id: 1, type: 'social', icon: '🥉', title: 'Friend Circle Update', message: 'Sarah is now #3 in the friend circle!', time: '2 min ago', unread: true },
+        { id: 2, type: 'achievement', icon: '👑', title: 'Achievement Unlocked', message: 'Ram has reached IELTS MASTER LEVEL!', time: '15 min ago', unread: true },
+        { id: 3, type: 'streak', icon: '🔥', title: 'Streak Milestone', message: 'Ganesh has reached a streak of 100 days!', time: '1 hour ago', unread: true },
+        { id: 4, type: 'reminder', icon: '⏰', title: 'Daily Reminder', message: "Don't forget to practice today to keep your streak!", time: '2 hours ago', unread: false },
+        { id: 5, type: 'xp', icon: '⭐', title: 'XP Earned', message: 'You earned 50 XP from yesterday\'s activities!', time: '5 hours ago', unread: false },
+        { id: 6, type: 'social', icon: '🎉', title: 'Friend Activity', message: 'Priya completed her first Rapid Fire session!', time: '1 day ago', unread: false },
+    ]
+
+    const unreadCount = mockNotifications.filter(n => n.unread).length
+
     return (
         <div className="profile-page">
+            {/* Notifications Popup */}
+            {showNotifications && (
+                <div className="notif-overlay" onClick={() => setShowNotifications(false)}>
+                    <div className="notif-popup" onClick={(e) => e.stopPropagation()}>
+                        <div className="notif-popup-header">
+                            <div className="notif-popup-title">
+                                <span className="notif-bell">🔔</span>
+                                <h3>Notifications</h3>
+                                {unreadCount > 0 && <span className="notif-count">{unreadCount} new</span>}
+                            </div>
+                            <button className="notif-close-btn" onClick={() => setShowNotifications(false)}>✕</button>
+                        </div>
+
+                        <div className="notif-popup-body">
+                            {mockNotifications.map((notif) => (
+                                <div key={notif.id} className={`notif-card ${notif.type} ${notif.unread ? 'unread' : ''}`}>
+                                    <div className="notif-card-icon">{notif.icon}</div>
+                                    <div className="notif-card-content">
+                                        <div className="notif-card-header">
+                                            <span className="notif-card-title">{notif.title}</span>
+                                            <span className="notif-card-time">{notif.time}</span>
+                                        </div>
+                                        <p className="notif-card-message">{notif.message}</p>
+                                    </div>
+                                    {notif.unread && <div className="notif-unread-dot"></div>}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="notif-popup-footer">
+                            <button className="notif-mark-read">Mark all as read</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="page-header">
                 <h1>Profile</h1>
             </div>
@@ -23,9 +73,18 @@ const Profile = ({ user, onLogout }) => {
             </div>
 
             <div className="profile-stats">
-                <div className="pstat"><span className="pstat-val">{user.xp}</span><span className="pstat-lbl">Total XP</span></div>
-                <div className="pstat"><span className="pstat-val">{user.streak}</span><span className="pstat-lbl">Streak</span></div>
-                <div className="pstat"><span className="pstat-val">{user.completedActivities.length}</span><span className="pstat-lbl">Done</span></div>
+                <div className="pstat">
+                    <span className="pstat-val">{user.xp}</span>
+                    <span className="pstat-lbl">Total XP</span>
+                </div>
+                <div className="pstat">
+                    <span className="pstat-val">{user.streak}</span>
+                    <span className="pstat-lbl">Streak</span>
+                </div>
+                <div className="pstat">
+                    <span className="pstat-val">{user.completedActivities.length}</span>
+                    <span className="pstat-lbl">Done</span>
+                </div>
             </div>
 
             <div className="profile-section">
@@ -49,10 +108,25 @@ const Profile = ({ user, onLogout }) => {
             <div className="profile-section">
                 <h3>⚙️ Settings</h3>
                 <div className="settings-list">
-                    <button className="settings-item">🔔 Notifications</button>
-                    <button className="settings-item">🌙 Dark Mode</button>
-                    <button className="settings-item">❓ Help & FAQ</button>
-                    <button className="settings-item logout" onClick={onLogout}>🚪 Log Out</button>
+                    <button className="settings-item" onClick={() => setShowNotifications(true)}>
+                        <span className="settings-icon">🔔</span>
+                        <span className="settings-text">Notifications</span>
+                        {unreadCount > 0 && <span className="settings-badge">{unreadCount}</span>}
+                    </button>
+                    <button className="settings-item">
+                        <span className="settings-icon">🌙</span>
+                        <span className="settings-text">Dark Mode</span>
+                        <span className="settings-toggle on"></span>
+                    </button>
+                    <button className="settings-item">
+                        <span className="settings-icon">❓</span>
+                        <span className="settings-text">Help & FAQ</span>
+                        <span className="settings-arrow">›</span>
+                    </button>
+                    <button className="settings-item logout" onClick={onLogout}>
+                        <span className="settings-icon">🚪</span>
+                        <span className="settings-text">Log Out</span>
+                    </button>
                 </div>
             </div>
 
