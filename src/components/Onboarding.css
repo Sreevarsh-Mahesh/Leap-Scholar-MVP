@@ -1,0 +1,348 @@
+.onboarding-container {
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%);
+}
+
+.onboarding-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.onboarding-step {
+    position: relative;
+    z-index: 10;
+    animation: fadeIn 0.4s ease;
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease;
+}
+
+/* Hero */
+.onboarding-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.onboarding-hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.onboarding-hero p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Features Preview */
+.features-preview {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border-color);
+}
+
+.feature-icon {
+    font-size: 18px;
+}
+
+.feature-item span:last-child {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* Step Header */
+.step-header {
+    margin-bottom: 32px;
+}
+
+.step-number {
+    display: inline-block;
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--primary-light);
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.step-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.step-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Form */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+/* Score Selector */
+.score-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.score-btn {
+    width: calc(33.33% - 6px);
+    padding: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.score-btn:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.score-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Diagnostic */
+.diagnostic-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.diagnostic-progress .progress-bar {
+    flex: 1;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.question-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skill-tag[data-skill="listening"] {
+    background: rgba(6, 182, 212, 0.2);
+    color: var(--listening);
+}
+
+.skill-tag[data-skill="reading"] {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--reading);
+}
+
+.skill-tag[data-skill="writing"] {
+    background: rgba(249, 115, 22, 0.2);
+    color: var(--writing);
+}
+
+.skill-tag[data-skill="speaking"] {
+    background: rgba(236, 72, 153, 0.2);
+    color: var(--speaking);
+}
+
+.question-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.option-btn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--primary);
+}
+
+.option-letter {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.option-text {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Result */
+.result-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.result-score {
+    margin-bottom: 24px;
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent-pink) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.score-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+}
+
+.score-message {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.ready-features {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.ready-features h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+}
+
+.ready-features ul {
+    list-style: none;
+}
+
+.ready-features li {
+    font-size: 14px;
+    color: var(--text-primary);
+    padding: 6px 0;
+}
+
+/* Button Styles */
+.btn-full {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.glow-btn {
+    animation: glow 2s ease-in-out infinite;
+}

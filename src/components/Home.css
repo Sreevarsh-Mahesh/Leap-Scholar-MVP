@@ -1,0 +1,6 @@
+.home-page {
+    position: relative;
+    z-index: 1;
+}
+
+/* Additional home-specific styles can go here */
