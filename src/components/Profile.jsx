@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Profile.css'
 
 const Profile = ({ user, onLogout }) => {
     const [showNotifications, setShowNotifications] = useState(false)
+    const [toastNotif, setToastNotif] = useState(null)
 
     const getDaysUntilExam = () => {
         if (!user.examDate) return null
@@ -23,8 +24,36 @@ const Profile = ({ user, onLogout }) => {
 
     const unreadCount = mockNotifications.filter(n => n.unread).length
 
+    const handleNotificationClick = (notif) => {
+        setToastNotif(notif)
+        setShowNotifications(false)
+    }
+
+    // Auto-dismiss toast after 4 seconds
+    useEffect(() => {
+        if (toastNotif) {
+            const timer = setTimeout(() => setToastNotif(null), 4000)
+            return () => clearTimeout(timer)
+        }
+    }, [toastNotif])
+
     return (
         <div className="profile-page">
+            {/* Toast Notification - Top of screen like iOS/Android */}
+            {toastNotif && (
+                <div className={`toast-notification ${toastNotif.type}`} onClick={() => setToastNotif(null)}>
+                    <div className="toast-icon">{toastNotif.icon}</div>
+                    <div className="toast-content">
+                        <div className="toast-header">
+                            <span className="toast-app">IELTS Quest</span>
+                            <span className="toast-time">now</span>
+                        </div>
+                        <p className="toast-title">{toastNotif.title}</p>
+                        <p className="toast-message">{toastNotif.message}</p>
+                    </div>
+                </div>
+            )}
+
             {/* Notifications Popup */}
             {showNotifications && (
                 <div className="notif-overlay" onClick={() => setShowNotifications(false)}>
@@ -40,7 +69,11 @@ const Profile = ({ user, onLogout }) => {
 
                         <div className="notif-popup-body">
                             {mockNotifications.map((notif) => (
-                                <div key={notif.id} className={`notif-card ${notif.type} ${notif.unread ? 'unread' : ''}`}>
+                                <div
+                                    key={notif.id}
+                                    className={`notif-card ${notif.type} ${notif.unread ? 'unread' : ''}`}
+                                    onClick={() => handleNotificationClick(notif)}
+                                >
                                     <div className="notif-card-icon">{notif.icon}</div>
                                     <div className="notif-card-content">
                                         <div className="notif-card-header">
