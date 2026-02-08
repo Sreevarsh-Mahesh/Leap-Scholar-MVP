@@ -2,31 +2,19 @@ import './Journey.css'
 
 const Journey = ({ user, onStartActivity }) => {
     const activities = [
-        { id: 1, type: 'rapid', skill: 'listening', title: 'Listening Basics', xp: 50 },
-        { id: 2, type: 'byte', skill: 'listening', title: 'Understanding Accents', xp: 40 },
-        { id: 3, type: 'rapid', skill: 'reading', title: 'Reading Comprehension', xp: 50 },
-        { id: 4, type: 'byte', skill: 'reading', title: 'Skimming Techniques', xp: 45 },
-        { id: 5, type: 'rapid', skill: 'writing', title: 'Grammar Essentials', xp: 50 },
-        { id: 6, type: 'byte', skill: 'writing', title: 'Task 1 Strategies', xp: 55 },
-        { id: 7, type: 'rapid', skill: 'speaking', title: 'Speaking Confidence', xp: 50 },
-        { id: 8, type: 'byte', skill: 'speaking', title: 'Fluency Tips', xp: 40 },
-        { id: 9, type: 'rapid', skill: 'listening', title: 'Advanced Listening', xp: 60 },
-        { id: 10, type: 'byte', skill: 'reading', title: 'Critical Analysis', xp: 50 },
-        { id: 11, type: 'rapid', skill: 'writing', title: 'Essay Structure', xp: 55 },
-        { id: 12, type: 'byte', skill: 'speaking', title: 'Part 2 Mastery', xp: 60 },
-        { id: 13, type: 'rapid', skill: 'listening', title: 'Expert Listening', xp: 65 },
-        { id: 14, type: 'byte', skill: 'reading', title: 'Speed Reading', xp: 55 },
-        { id: 15, type: 'rapid', skill: 'writing', title: 'Advanced Writing', xp: 60 },
+        { id: 1, type: 'rapid', skill: 'listening', title: 'Listening Basics', xp: 50, island: 'Starter Island' },
+        { id: 2, type: 'byte', skill: 'listening', title: 'Understanding Accents', xp: 40, island: 'Starter Island' },
+        { id: 3, type: 'rapid', skill: 'reading', title: 'Reading Comprehension', xp: 50, island: 'Starter Island' },
+        { id: 4, type: 'byte', skill: 'reading', title: 'Skimming Techniques', xp: 45, island: 'Forest of Words' },
+        { id: 5, type: 'rapid', skill: 'writing', title: 'Grammar Essentials', xp: 50, island: 'Forest of Words' },
+        { id: 6, type: 'byte', skill: 'writing', title: 'Task 1 Strategies', xp: 55, island: 'Forest of Words' },
+        { id: 7, type: 'rapid', skill: 'speaking', title: 'Speaking Confidence', xp: 50, island: 'Voice Valley' },
+        { id: 8, type: 'byte', skill: 'speaking', title: 'Fluency Tips', xp: 40, island: 'Voice Valley' },
+        { id: 9, type: 'rapid', skill: 'listening', title: 'Advanced Listening', xp: 60, island: 'Voice Valley' },
+        { id: 10, type: 'byte', skill: 'reading', title: 'Critical Analysis', xp: 50, island: 'Summit Peak' },
+        { id: 11, type: 'rapid', skill: 'writing', title: 'Essay Structure', xp: 55, island: 'Summit Peak' },
+        { id: 12, type: 'byte', skill: 'speaking', title: 'Part 2 Mastery', xp: 60, island: 'Summit Peak' },
     ]
-
-    const getSkillIcon = (skill) => {
-        const icons = { listening: '🎧', reading: '📖', writing: '✍️', speaking: '🗣️' }
-        return icons[skill] || '📚'
-    }
-
-    const getTypeIcon = (type) => {
-        return type === 'rapid' ? '⚡' : '🎬'
-    }
 
     const isCompleted = (activityId) => {
         return user.completedActivities.some(id => id.includes(`-${activityId}`) || id.includes(`byte-${activityId}`))
@@ -36,91 +24,192 @@ const Journey = ({ user, onStartActivity }) => {
         for (let activity of activities) {
             if (!isCompleted(activity.id)) return activity.id
         }
-        return activities.length
+        return activities.length + 1
     }
 
     const isLocked = (activityId) => {
-        const nextId = getNextActivity()
-        return activityId > nextId
+        return activityId > getNextActivity()
     }
 
     const completedCount = activities.filter(a => isCompleted(a.id)).length
     const progressPercent = (completedCount / activities.length) * 100
 
+    const islands = [
+        { name: 'Starter Island', theme: 'beach', icon: '🏝️' },
+        { name: 'Forest of Words', theme: 'forest', icon: '🌲' },
+        { name: 'Voice Valley', theme: 'mountain', icon: '🏔️' },
+        { name: 'Summit Peak', theme: 'summit', icon: '⛰️' },
+    ]
+
+    // Defined coordinate system for 300x320 SVG space
+    // pos index: 0=center-top, 1=right, 2=center-bottom
+    const getCoordinates = (index) => {
+        // 3 nodes per island
+        if (index === 0) return { x: 150, y: 60 }   // Center Top
+        if (index === 1) return { x: 230, y: 160 }  // Right Middle
+        if (index === 2) return { x: 150, y: 260 }  // Center Bottom
+        return { x: 150, y: 0 }
+    }
+
     return (
         <div className="journey-page">
             <div className="page-header">
-                <h1>Your Journey</h1>
-                <p>Complete activities to unlock more</p>
+                <h1>🗺️ Adventure Map</h1>
             </div>
 
-            {/* Progress Overview */}
-            <div className="journey-progress">
-                <div className="progress-stats">
-                    <div className="progress-stat">
-                        <span className="stat-value">{completedCount}</span>
-                        <span className="stat-label">Completed</span>
-                    </div>
-                    <div className="progress-circle">
-                        <svg viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="10" />
-                            <circle
-                                cx="50" cy="50" r="45"
-                                fill="none"
-                                stroke="url(#progressGradient)"
-                                strokeWidth="10"
-                                strokeLinecap="round"
-                                strokeDasharray={`${progressPercent * 2.83} 283`}
-                                transform="rotate(-90 50 50)"
-                            />
-                            <defs>
-                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="var(--primary)" />
-                                    <stop offset="100%" stopColor="var(--accent-pink)" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <span className="progress-percent">{Math.round(progressPercent)}%</span>
-                    </div>
-                    <div className="progress-stat">
-                        <span className="stat-value">{activities.length - completedCount}</span>
-                        <span className="stat-label">Remaining</span>
-                    </div>
+            {/* Progress Bar */}
+            <div className="map-progress">
+                <div className="map-progress-bar">
+                    <div className="map-progress-fill" style={{ width: `${progressPercent}%` }} />
+                </div>
+                <div className="map-progress-labels">
+                    <span>🏝️</span>
+                    <span className="progress-count">⭐ {completedCount}/{activities.length}</span>
+                    <span>🏆</span>
                 </div>
             </div>
 
-            {/* Roadmap */}
-            <div className="roadmap">
-                <div className="roadmap-line" />
-                {activities.map((activity, index) => {
-                    const completed = isCompleted(activity.id)
-                    const locked = isLocked(activity.id)
-                    const current = activity.id === getNextActivity()
+            {/* Islands */}
+            <div className="islands-container">
+                {islands.map((island) => {
+                    const islandActivities = activities.filter(a => a.island === island.name)
+                    const islandCompleted = islandActivities.every(a => isCompleted(a.id))
+                    const islandLocked = islandActivities[0] && isLocked(islandActivities[0].id)
 
                     return (
                         <div
-                            key={activity.id}
-                            className={`roadmap-node ${completed ? 'completed' : ''} ${locked ? 'locked' : ''} ${current ? 'current' : ''}`}
-                            onClick={() => !locked && onStartActivity(activity)}
+                            key={island.name}
+                            className={`island ${island.theme} ${islandCompleted ? 'completed' : ''} ${islandLocked ? 'locked' : ''}`}
                         >
-                            <div className="node-marker">
-                                {completed ? '✓' : locked ? '🔒' : getTypeIcon(activity.type)}
-                            </div>
-                            <div className="node-content">
-                                <div className="node-header">
-                                    <span className="node-type">{activity.type === 'rapid' ? 'Rapid Fire' : 'Video Byte'}</span>
-                                    <span className="node-skill">{getSkillIcon(activity.skill)}</span>
+                            {/* Island Header */}
+                            <div className="island-header">
+                                <span className="island-icon">{island.icon}</span>
+                                <div className="island-info">
+                                    <h3>{island.name}</h3>
+                                    <span className="island-status">
+                                        {islandCompleted ? '✅ Complete' : islandLocked ? '🔒 Locked' : `${islandActivities.filter(a => isCompleted(a.id)).length}/${islandActivities.length} done`}
+                                    </span>
                                 </div>
-                                <h3 className="node-title">{activity.title}</h3>
-                                <span className="node-xp">+{activity.xp} XP</span>
                             </div>
-                            {current && <div className="current-indicator">START</div>}
+
+                            {/* Path Container */}
+                            <div className="duo-path-container">
+                                {/* SVG connecting lines defined in JS to perfectly match nodes */}
+                                <svg className="path-svg" viewBox="0 0 300 320" preserveAspectRatio="xMidYMid meet">
+                                    {/* Path 1 -> 2 */}
+                                    <path
+                                        d="M 150 60 Q 230 60, 230 160"
+                                        fill="none"
+                                        stroke="rgba(255,255,255,0.2)"
+                                        strokeWidth="8"
+                                        strokeDasharray="12 12"
+                                        strokeLinecap="round"
+                                    />
+                                    <path
+                                        d="M 150 60 Q 230 60, 230 160"
+                                        fill="none"
+                                        stroke="#10b981"
+                                        strokeWidth="8"
+                                        strokeDasharray="12 12"
+                                        strokeLinecap="round"
+                                        className="path-progress"
+                                        style={{
+                                            opacity: isCompleted(islandActivities[0]?.id) ? 1 : 0,
+                                            transition: 'opacity 0.5s ease 0.2s'
+                                        }}
+                                    />
+
+                                    {/* Path 2 -> 3 */}
+                                    <path
+                                        d="M 230 160 Q 230 260, 150 260"
+                                        fill="none"
+                                        stroke="rgba(255,255,255,0.2)"
+                                        strokeWidth="8"
+                                        strokeDasharray="12 12"
+                                        strokeLinecap="round"
+                                    />
+                                    <path
+                                        d="M 230 160 Q 230 260, 150 260"
+                                        fill="none"
+                                        stroke="#10b981"
+                                        strokeWidth="8"
+                                        strokeDasharray="12 12"
+                                        strokeLinecap="round"
+                                        className="path-progress"
+                                        style={{
+                                            opacity: isCompleted(islandActivities[1]?.id) ? 1 : 0,
+                                            transition: 'opacity 0.5s ease 0.2s'
+                                        }}
+                                    />
+                                </svg>
+
+                                {/* Nodes positioned using the same coordinates */}
+                                {islandActivities.map((activity, index) => {
+                                    const coords = getCoordinates(index)
+                                    return (
+                                        <div
+                                            key={activity.id}
+                                            className="node-absolute-wrapper"
+                                            style={{
+                                                left: `${(coords.x / 300) * 100}%`,
+                                                top: `${(coords.y / 320) * 100}%`
+                                            }}
+                                        >
+                                            <NodeComponent
+                                                activity={activity}
+                                                completed={isCompleted(activity.id)}
+                                                locked={isLocked(activity.id)}
+                                                current={activity.id === getNextActivity()}
+                                                onStart={onStartActivity}
+                                            />
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </div>
                     )
                 })}
+
+                {/* Final Treasure */}
+                <div className="treasure-section">
+                    <div className="treasure-icon">🏆</div>
+                    <h3>IELTS Master</h3>
+                </div>
             </div>
 
-            <div style={{ height: '100px' }} />
+            <div style={{ height: '120px' }} />
+        </div>
+    )
+}
+
+// Separate Node Component
+const NodeComponent = ({ activity, completed, locked, current, onStart }) => {
+    return (
+        <div className="node-container">
+            <div className="hover-tooltip">
+                <span className="tt-type">{activity.type === 'rapid' ? '🎮 Game' : '📺 Video'}</span>
+                <span className="tt-title">{activity.title}</span>
+                <span className="tt-xp">+{activity.xp} XP</span>
+            </div>
+
+            <div
+                className={`duo-node ${completed ? 'completed' : ''} ${locked ? 'locked' : ''} ${current ? 'current' : ''}`}
+                onClick={() => !locked && onStart(activity)}
+            >
+                {current && <div className="progress-ring"></div>}
+
+                <div className="node-btn">
+                    {completed ? (
+                        <span className="check-icon">✓</span>
+                    ) : locked ? (
+                        <span className="lock-icon">🔒</span>
+                    ) : (
+                        <span className="type-icon">{activity.type === 'rapid' ? '🎮' : '📺'}</span>
+                    )}
+                </div>
+
+                {current && <div className="start-label">START</div>}
+            </div>
         </div>
     )
 }
